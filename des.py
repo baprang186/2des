@@ -16,8 +16,11 @@ def des_decrypt(key, ciphertext):
     return decrypted.decode('utf-8').rstrip()
 
 # Ví dụ sử dụng
-key = b'key00002'  # Khóa phải có độ dài 8 byte
-plaintext = "Hello, DES!"
+key_input = input("Nhập khóa key: ").strip()
+key = key_input.encode()
+if len(key) % 8 != 0:
+    raise ValueError("Khóa phải có độ dài 8 byte!") 
+plaintext = input("Enter plaintext: ")
 
 ciphertext = des_encrypt(key, plaintext)
 print("Ciphertext:", ciphertext)
