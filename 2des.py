@@ -28,8 +28,16 @@ def double_des_decrypt(key1, key2, ciphertext):
     return des_decrypt(key1, intermediate)
 
 # Ví dụ sử dụng
-key1 = b'key1key1'  # Khóa 1
-key2 = b'key2key2'  # Khóa 2
+key1_input = input("Nhập khóa key1: ").strip()
+key1 = key1_input.encode()
+if len(key1) % 8 != 0:
+    raise ValueError("Khóa phải có độ dài 8 byte!") 
+key2_input = input("Nhập khóa key: ").strip()
+key2 = key2_input.encode()
+if len(key2) % 8 != 0:
+    raise ValueError("Khóa phải có độ dài 8 byte!") 
+#key1 = b'key1key1'  # Khóa 1
+#key2 = b'key2key2'  # Khóa 2
 
 plaintext = input("Enter plaintext: ")
 ciphertext = double_des_encrypt(key1, key2, plaintext)
