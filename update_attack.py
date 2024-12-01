@@ -23,10 +23,10 @@ def des_attack(ciphertext, plaintext, keys_file):
     with open(keys_file, 'r') as f:
         keys = [line.strip().encode('utf-8') for line in f.readlines()]
     
-    print(f"Bắt đầu thử khóa trong {keys_file}...")
+    print(f"Start testing key in {keys_file}...")
     for key in keys:
         decrypted = des_decrypt(key, ciphertext)
-        print(f"Thử key: {key.decode('utf-8')} -> Giải mã: {decrypted}")
+        print(f"Test key: {key.decode('utf-8')} -> Decrypted: {decrypted}")
         if decrypted == plaintext:
             return key
     return None
@@ -40,29 +40,29 @@ def meet_in_the_middle_attack(ciphertext, plaintext, keys1_file, keys2_file):
         keys2 = [line.strip().encode('utf-8') for line in f.readlines()]
 
     if not keys1 or not keys2:  # Kiểm tra nếu keys1 hoặc keys2 rỗng
-        print("Một trong hai file khóa rỗng. Chuyển sang tấn công DES đơn.")
+        print("One of the two key files is empty. Switch to simple DES attack.")
         keys_file = keys1_file if keys1 else keys2_file
         found_key = des_attack(ciphertext, plaintext, keys_file)
         if found_key:
-            print("\nTấn công DES thành công ")
-            print(f"Khóa tìm được: {found_key.decode('utf-8')}")
+            print("\nDES attack successfully!")
+            print(f"Found key: {found_key.decode('utf-8')}")
         else:
-            print("\nTấn công DES không thành công. Không tìm thấy khóa phù hợp!")
+            print("\nDES attack failed. No matching key found!")
         return None, None  # Không thực hiện MITM nếu một trong hai file rỗng
 
     # Lưu kết quả mã hóa plaintext với tất cả key1
     encrypt_dict = {}
-    print("Bắt đầu thử khóa trong keys1.txt...")
+    print("Start testing key in keys1.txt...")
     for key1 in keys1:
         encrypted = des_encrypt(key1, plaintext)
         encrypt_dict[encrypted] = key1
-        print(f"Thử key1: {key1.decode('utf-8')} -> Mã hóa: {encrypted}")
+        print(f"Try key1: {key1.decode('utf-8')} -> Encrypted: {encrypted}")
 
     # Kiểm tra giải mã ciphertext với tất cả key2
-    print("\nBắt đầu thử khóa trong keys2.txt...")
+    print("\nStart testing key in keys2.txt...")
     for key2 in keys2:
         decrypted = des_decrypt(key2, ciphertext)
-        print(f"Thử key2: {key2.decode('utf-8')} -> Giải mã: {decrypted}")
+        print(f"Try key2: {key2.decode('utf-8')} -> Decrypted: {decrypted}")
         if decrypted in encrypt_dict:
             return encrypt_dict[decrypted], key2
 
@@ -83,8 +83,8 @@ if __name__ == "__main__":
     found_key1, found_key2 = meet_in_the_middle_attack(ciphertext, plaintext, keys1_file, keys2_file)
 
     if found_key1 and found_key2:
-        print("\nTấn công 2DES thành công.  Khóa tìm được:")
+        print("\n2DES attack successfully.  Found key:")
         print("Key1:", found_key1.decode('utf-8'))
         print("Key2:", found_key2.decode('utf-8'))
     else:
-        print("\nTấn công 2DES không thành công. Không tìm thấy cặp khóa phù hợp!")
+        print("\n2DES attack failed. No matching key pair found.!")
