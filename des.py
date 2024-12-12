@@ -1,29 +1,20 @@
 from Crypto.Cipher import DES
 import base64
 
-# Hàm tạo đối tượng DES
+# Ham tao doi tuong DES
 def des_encrypt(key, plaintext):
     cipher = DES.new(key, DES.MODE_ECB)
-    # Padding để đảm bảo plaintext có độ dài là bội số của 8
+    # Padding de dam bao plaintext co do dai boi so cua 8
     padded_text = plaintext + (8 - len(plaintext) % 8) * ' '
     encrypted = cipher.encrypt(padded_text.encode('utf-8'))
     return base64.b64encode(encrypted).decode('utf-8')
 
-def des_decrypt(key, ciphertext):
-    cipher = DES.new(key, DES.MODE_ECB)
-    encrypted_bytes = base64.b64decode(ciphertext)
-    decrypted = cipher.decrypt(encrypted_bytes)
-    return decrypted.decode('utf-8').rstrip()
-
-# Ví dụ sử dụng
-key_input = input("Nhập khóa key: ").strip()
+# Vi du su dung
+key_input = input("Nhap khoa key: ").strip()
 key = key_input.encode()
 if len(key) % 8 != 0:
-    raise ValueError("Khóa phải có độ dài 8 byte!") 
-plaintext = input("Enter plaintext: ")
+    raise ValueError("Khoa phai co do dai 8 byte!") 
+plaintext = input("Nhap ban ro plaintext: ")
 
 ciphertext = des_encrypt(key, plaintext)
 print("Ciphertext:", ciphertext)
-
-decrypted_text = des_decrypt(key, ciphertext)
-print("Decrypted text:", decrypted_text)
