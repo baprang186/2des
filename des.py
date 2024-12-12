@@ -17,4 +17,4 @@ if len(key) % 8 != 0:
 plaintext = input("Nhap ban ro plaintext: ")
 
 ciphertext = des_encrypt(key, plaintext)
-print("Ciphertext:", ciphertext)
+print("Ciphertext: ", ciphertext)
